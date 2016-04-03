@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>OSCK - OSC Sockets - (Websockets)</h1>
+		<p>(watch firebug console output)</p>
+		<script src="OSC.js"></script>
+		<script src="index.js"></script>
+		<script>
+			function button_clicked()
+			{
+				if(!connected)
+				{
+					alert("not connected. is the websocket server running? also try reloading the page.");
+					return;
+				}
+				new OSCMessage('/hello','sif',['world',42,.3]).send('localhost',9999);
+			}
+		</script>
+		<button onclick="button_clicked()">Send a message to localhost:9999</button> 
+	</body>
+</html>
