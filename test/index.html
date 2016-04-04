@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>osck</title>
+	</head>
 	<body>
 		<h1>OSCK - OSC Sockets - (Websockets)</h1>
 		<p>(watch firebug console output)</p>
 		<script src="OSC.js"></script>
 		<script src="index.js"></script>
 		<script>
-			function button_clicked()
+			function send_clicked()
 			{
 				if(!connected)
 				{
-					alert("not connected. is the websocket server running? also try reloading the page.");
+					console.log("not connected. is the websocket server running? also try reloading the page.");
 					return;
 				}
 				new OSCMessage('/hello','sif',['world',42,.3]).send('localhost',9999);
 			}
 		</script>
-		<button onclick="button_clicked()">Send a message to localhost:9999</button> 
+		<button onclick="ws_connect()">Connect to websocket</button>
+		<button onclick="ws_disconnect()">Disconnect from websocket</button>
+		<button onclick="send_clicked()">Send a message to localhost:9999</button>
 	</body>
 </html>
