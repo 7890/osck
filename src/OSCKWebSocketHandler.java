@@ -31,12 +31,15 @@ public class OSCKWebSocketHandler
 
 	private boolean debug=false;
 
+	private boolean connected=false;
+
 //websocket callback methods
 //=============================================================================
 	@OnWebSocketConnect
 	public void onConnect(Session session)
 	{
 		sess=session;
+		connected=true;
 		p("Connect: " + session.getRemoteAddress().getAddress());
 
 		final RemoteEndpoint ep=session.getRemote();
@@ -44,7 +47,7 @@ public class OSCKWebSocketHandler
 		{
 			public void run()
 			{
-				while(1==1)
+				while(connected)
 				{
 					try{
 						if(heartbeat_impulse_millis>0)
@@ -164,6 +167,8 @@ public class OSCKWebSocketHandler
 	public void onClose(int statusCode, String reason)
 	{
 		p("Close: statusCode=" + statusCode + ", reason=" + reason);
+		sess=null;
+		connected=false;
 		shutdown();
 	}
 
@@ -172,6 +177,8 @@ public class OSCKWebSocketHandler
 	public void onError(Throwable t)
 	{
 		e("Error: " + t.getMessage());
+		sess=null;
+		connected=false;
 	}
 
 //end of websocket callback methods 
@@ -222,7 +229,7 @@ class MessageListener implements OSCListener
 		if(callback_name!=null && callback_name!=null)
 		{
 			d("calling back JS method '"+callback_name+"'");
-			if(sess!=null)
+			if(sess!=null && connected)
 			{
 				try
 				{
