@@ -18,6 +18,7 @@ jsource=1.6
 jtarget=1.6
 
 JAVAC="javac -source $jsource -target $jtarget -nowarn"
+JAVA="java -Xms500M -Xmx1000M"
 
 jetty_dist_name=jetty-distribution-9.2.10.v20150310
 #jetty_dist_name=jetty-distribution-9.3.8.v20160314
@@ -60,9 +61,24 @@ run_osck()
 	echo "running OSCK"
 	echo "============"
 	jetty_home="$build"/"$jetty_dist_name"
-	jetty_libs=`echo $(ls -1 "$jetty_home"/lib/*.jar) | sed 's/ /:/g'`":"`echo $(ls -1 "$jetty_home"/lib/websocket/*.jar) | sed 's/ /:/g'`
+#	jetty_libs=`echo $(ls -1 "$jetty_home"/lib/*.jar) | sed 's/ /:/g'`":"`echo $(ls -1 "$jetty_home"/lib/websocket/*.jar) | sed 's/ /:/g'`
 
-	java -classpath "$build":"$java_osc_jar":"$jetty_libs" WebSocketServer
+	jlib="$jetty_home"/lib
+	jetty_libs=""
+	jetty_libs="${jetty_libs}:"
+	jetty_libs="${jetty_libs}:"${jlib}/jetty-http-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/jetty-io-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/jetty-server-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/jetty-util-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/servlet-api-3.1.jar
+
+	jetty_libs="${jetty_libs}:"${jlib}/websocket/websocket-api-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/websocket/websocket-common-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/websocket/websocket-server-9.2.10.v20150310.jar
+	jetty_libs="${jetty_libs}:"${jlib}/websocket/websocket-servlet-9.2.10.v20150310.jar
+
+echo	$JAVA -classpath "$build":"$java_osc_jar":"$jetty_libs" WebSocketServer
+	$JAVA -classpath "$build":"$java_osc_jar":"$jetty_libs" WebSocketServer
 }
 
 for tool in java javac jar javadoc; \

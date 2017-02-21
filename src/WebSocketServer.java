@@ -30,6 +30,18 @@ public class WebSocketServer
 //========================================================================
 	public WebSocketServer(String[] args) throws Exception
 	{
+		if(args.length>0 && (args[0].equals("-h") || args[0].equals("--help")))
+		{
+			System.out.println("WebSocketServer Help");
+			System.out.println("Arguments: (properties file to use)");
+			System.out.println("If no argument given, default file '"+propertiesFileUri+"' will be used.");
+			System.exit(0);
+		}
+		else if(args.length>0)
+		{
+			propertiesFileUri=args[0];
+		}
+
 		if(!loadProps(propertiesFileUri))
 		{
 			System.err.println("could not load properties");
